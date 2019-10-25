@@ -1,0 +1,37 @@
+{
+    "entryScript": "./score.py",
+    "environment":
+    {
+        "docker": {
+          "baseImage": "mcr.microsoft.com/azureml/base:intelmpi2018.3-ubuntu16.04"
+        },
+        "inferencingStackVersion": "latest",
+        "name": "inline-deploy-env",
+        "python": {
+          "condaDependencies": {
+            "channels": [
+              "conda-forge"
+            ],
+            "dependencies": [
+              "python=3.6.2",
+              {
+                "pip": [
+                  "azureml-defaults",
+                  "opencv-python-headless",
+                  "azureml-contrib-services"
+                ]
+              },
+              "numpy",
+              "tqdm",
+              "tensorflow=1.14",
+              "matplotlib",
+              "scikit-image"
+            ],
+            "name": "azureml_d4aa2cd89a93d211303665e2475b0c0c"
+          },
+          "interpreterPath": "python",
+          "userManagedDependencies": false
+        },
+        "version": "1"
+    }
+}
