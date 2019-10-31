@@ -1,14 +1,4 @@
----
-page_type: sample
-languages:
-- csharp
-products:
-- dotnet
-description: "Add 150 character max description"
-urlFragment: "update-this-to-unique-url-stub"
----
-
-# Official Microsoft Sample
+# Package Azure Machine Learning Models for 
 
 <!-- 
 Guidelines on README format: https://review.docs.microsoft.com/help/onboard/admin/samples/concepts/readme-template?branch=master
@@ -26,7 +16,8 @@ Outline the file contents of the repository. It helps users navigate the codebas
 
 | File/folder       | Description                                |
 |-------------------|--------------------------------------------|
-| `src`             | Sample source code.                        |
+| `Demo`            | Sample demo from ignite.                        |
+| `azure_cli_ml_preview-1.0.72-py2.py3-none-any.whl` | wheel file containg preview CLI |
 | `.gitignore`      | Define what to ignore at commit time.      |
 | `CHANGELOG.md`    | List of changes to the sample.             |
 | `CONTRIBUTING.md` | Guidelines for contributing to the sample. |
@@ -35,19 +26,78 @@ Outline the file contents of the repository. It helps users navigate the codebas
 
 ## Prerequisites
 
-Outline the required components and tools that a user might need to have on their machine in order to run the sample. This can be anything from frameworks, SDKs, OS versions or IDE releases.
+Python, Azure CLI, Azure ML CLI Extension
 
 ## Setup
 
-Explain how to prepare the sample once the user clones or downloads the repository. The section should outline every step necessary to install dependencies and set up any settings (for example, API keys and output folders).
+Add the preview CLI to your Azure CLI
+
+```
+az extension add --source azure_cli_ml_preview-1.0.72-py2.py3-none-any.whl
+```
+
+You can also use the URL of the 'raw' CLI in github to install it.
 
 ## Runnning the sample
 
-Outline step-by-step instructions to execute the sample and see its output. Include steps for executing the sample from the IDE, starting specific services in the Azure portal or anything related to the overall launch of the code.
+See Demo/readme.md
 
 ## Key concepts
 
-Provide users with more context on the tools and services used in the sample. Explain some of the code that is being used and how services interact with each other.
+As a preview, you can now package Azure ML Models for use with Azure functions. 
+You can either use `azureml-contrib-functions` from PyPi, or the CLI preview features included in this repo.
+
+### Package Options File
+When you package your model, you can package it for functions by providing a 'Package Options File', which is a JSON file that tells Azure ML how to packge your model.
+
+#### Example for HTTP
+```
+{
+    {"flavor": "functionsApp", 
+    "trigger": "Http", 
+    "authLevel": "anonymous"}
+}
+```
+Auth level is as described in the [Azure Functions Documentation](https://docs.microsoft.com/azure/azure-functions/functions-bindings-http-webhook?tabs=csharp#trigger---configuration)
+
+Auth level is an optional parameter which defaults to function.
+
+#### Example for Blob
+```
+{   "flavor": "functionsApp", 
+    "trigger": "Blob", 
+    "inPath": "input/{blobname}.{blobextension}",
+    "outPath": "output/{blobname}.out"}
+```
+Input path and output path are as described in documentation [here](https://docs.microsoft.com/azure/azure-functions/functions-bindings-storage-blob?tabs=csharp#trigger---blob-name-patterns)
+
+They are optional parameters which default to the above values.
+
+Make sure to see [Connection Strings](#Connection-Strings) for configuring your storage account.
+
+#### Example for Service Bus Queue
+```
+"flavor": "functionsApp", 
+    "trigger": "ServiceBusQueue", 
+    "inQueueName": "inqueue",
+    "outQueueName": "outqueue"}
+```
+They are optional parameters which default to the above values.
+
+Make sure to see [Connection Strings](#Connection-Strings) for configuring your Service Bus account.
+
+
+### Connection Strings
+
+Blob and Service Bus Queues require a connection string to know which storage account or Service bus to connect to.
+
+You should pass these connections strings as the aplication setting `TriggerConnectionString` when you deploy  or if you choose to write the docker context to your local disk, you could add it as an environment variable in the dockerfile with the same name.  
+
+[More info on application settings](https://docs.microsoft.com/azure/azure-functions/functions-how-to-use-azure-function-app-settings).
+
+## Feedback
+
+This capability is in public preview and needs your feedback. If you face challenges or are interested in additional triggers, please open an issue in this repo.
 
 ## Contributing
 
