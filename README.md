@@ -36,7 +36,7 @@ Add the preview CLI to your Azure CLI
 az extension add --source azure_cli_ml_preview-1.0.72-py2.py3-none-any.whl
 ```
 
-You can also use the URL of the 'raw' CLI in github to install it.
+You can also use the URL of the 'raw' wheel file in github to install it. [[Link](https://github.com/Azure/ml-functions-package-demo/blob/master/azure_cli_ml_preview-1.0.72-py2.py3-none-any.whl?raw=true)]
 
 ## Runnning the sample
 
